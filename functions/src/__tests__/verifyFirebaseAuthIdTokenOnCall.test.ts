@@ -1,84 +1,73 @@
-import { verifyFirebaseAuthIdTokenOnCall } from '../lib/verifyFirebaseAuthIdTokenOnCall';
+import { verifyFirebaseAuthIdTokenOnCall } from "../lib/verifyFirebaseAuthIdTokenOnCall";
 
-import { mock } from 'jest-mock-extended';
-import * as functions from 'firebase-functions';
-import { AuthData } from 'firebase-functions/v2/tasks';
-import { DecodedIdToken } from 'firebase-admin/auth';
+import { mock } from "jest-mock-extended";
+import * as functions from "firebase-functions";
+import { AuthData } from "firebase-functions/v2/tasks";
+import { DecodedIdToken } from "firebase-admin/auth";
 
 // interfaceからモックオブジェクト生成
-let mockContext = mock<functions.https.CallableContext>();
-let mockAuth = mock<AuthData>();
-let mockDecodedIdToken = mock<DecodedIdToken>();
+const mockContext = mock<functions.https.CallableContext>();
+const mockAuth = mock<AuthData>();
+const mockDecodedIdToken = mock<DecodedIdToken>();
 
 afterEach(() => {
+  // モックオブジェクト組み立て
+  mockContext.auth = mockAuth;
+  mockAuth.uid = "mock uid";
+  mockAuth.token = mockDecodedIdToken;
+  mockDecodedIdToken.uid = "mock token uid";
 
-    // モックオブジェクト組み立て
-    mockContext.auth = mockAuth;
-    mockAuth.uid = "mock uid";
-    mockAuth.token = mockDecodedIdToken;
-    mockDecodedIdToken.uid = "mock token uid";
-
-    // console.log("mockContext : ",mockContext);
-    // console.log("mockAuth: ",mockAuth);
-    // console.log("mockDecodedIdToken: ",mockDecodedIdToken);
+  // console.log("mockContext : ",mockContext);
+  // console.log("mockAuth: ",mockAuth);
+  // console.log("mockDecodedIdToken: ",mockDecodedIdToken);
 });
 
-describe('verifyFirebaseAuthIdToken ', () => { 
-    test('auth fail', async () => {
-       
-        // Given
-        
-        // context.authに認認証情が含まれていないケース
-        // モックオブジェクト組み立て
-        mockContext.auth = undefined;
-        // mockAuth.uid = "mock uid";
-        // mockAuth.token = mockDecodedIdToken;
-        // mockDecodedIdToken.uid = "mock token uid";
+describe("verifyFirebaseAuthIdToken ", () => {
+  test("auth fail", async () => {
+    // Given
 
+    // context.authに認認証情が含まれていないケース
+    // モックオブジェクト組み立て
+    mockContext.auth = undefined;
+    // mockAuth.uid = "mock uid";
+    // mockAuth.token = mockDecodedIdToken;
+    // mockDecodedIdToken.uid = "mock token uid";
 
-        // When
-        const result = await verifyFirebaseAuthIdTokenOnCall(mockContext);
-        
-        console.log(' result : ', result);
-        
-        // Then
+    // When
+    const result = await verifyFirebaseAuthIdTokenOnCall(mockContext);
 
-        // returnされたデータが想定どおりであること
-        expect(result.code).toEqual(500);
-        expect(result.message).toContain('not authenticated');
-        expect(JSON.parse(result.data).uid).toEqual("");
-        expect(JSON.parse(result.data).firebaseAuthIdToken).toEqual("");
-    })
+    console.log(" result : ", result);
 
+    // Then
 
-    
-    test('auth success', async () => { 
+    // returnされたデータが想定どおりであること
+    expect(result.code).toEqual(500);
+    expect(result.message).toContain("not authenticated");
+    expect(JSON.parse(result.data).uid).toEqual("");
+    expect(JSON.parse(result.data).firebaseAuthIdToken).toEqual("");
+  });
 
-        // Given
-        
-        // context.authに認認証情が含まれているケース
-        // モックオブジェクト組み立て
-        // mockContext.auth = mockAuth;
-        // mockAuth.uid = "mock uid";
-        // mockAuth.token = mockDecodedIdToken;
-        mockDecodedIdToken.uid = "mock token uid";
+  test("auth success", async () => {
+    // Given
 
-      
-       
-        // When
-        const result = await verifyFirebaseAuthIdTokenOnCall(mockContext);
-        
-        console.log(' result : ', result);
-       
-        // Then
-        
-        // returnされたデータが想定どおりであること
-        expect(result.code).toEqual(200);
-        expect(result.message).toContain('id token verify success.');
-        expect(JSON.parse(result.data).uid).toEqual(mockContext.auth?.token.uid);
-        // expect(JSON.parse(result.data).firebaseAuthIdToken).toEqual(mockContext.auth?.token);
+    // context.authに認認証情が含まれているケース
+    // モックオブジェクト組み立て
+    // mockContext.auth = mockAuth;
+    // mockAuth.uid = "mock uid";
+    // mockAuth.token = mockDecodedIdToken;
+    mockDecodedIdToken.uid = "mock token uid";
 
-    })
+    // When
+    const result = await verifyFirebaseAuthIdTokenOnCall(mockContext);
 
-})
+    console.log(" result : ", result);
 
+    // Then
+
+    // returnされたデータが想定どおりであること
+    expect(result.code).toEqual(200);
+    expect(result.message).toContain("id token verify success.");
+    expect(JSON.parse(result.data).uid).toEqual(mockContext.auth?.token.uid);
+    // expect(JSON.parse(result.data).firebaseAuthIdToken).toEqual(mockContext.auth?.token);
+  });
+});

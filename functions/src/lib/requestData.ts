@@ -1,31 +1,30 @@
-import { Request } from 'firebase-functions';
-import { Result } from './result';
+import { Request } from "firebase-functions";
+import { Result } from "./result";
 
 export type RequestData = {
-  channelName: string,
-  localUid: number,
-  account: string,
-  rtcIdTokenType: string,
-  role: string,
-  privilegeExpireTime: number,
-  firebaseAuthIdToken: string,
+  channelName: string;
+  localUid: number;
+  account: string;
+  rtcIdTokenType: string;
+  role: string;
+  privilegeExpireTime: number;
+  firebaseAuthIdToken: string;
 };
 
-// requestデータからオブジェクト生成　
-export function createRequestDataObject(request: Request) : Result<string>{
-   
+// requestデータからオブジェクト生成
+export function createRequestDataObject(request: Request): Result<string> {
   let jsonDataObject;
 
   try {
     jsonDataObject = JSON.parse(request.body);
-    if (Object.keys(jsonDataObject).length === 0) throw Error("invalid request data");
-
+    if (Object.keys(jsonDataObject).length === 0)
+      throw Error("invalid request data");
   } catch (e) {
     const result: Result<string> = {
       code: 500,
       message: String(e),
       data: "",
-    }
+    };
     return result;
   }
 
@@ -38,7 +37,6 @@ export function createRequestDataObject(request: Request) : Result<string>{
     privilegeExpireTime: jsonDataObject.privilegeExpireTime,
     firebaseAuthIdToken: jsonDataObject.firebaseAuthIdToken,
   };
-  
 
   const result: Result<string> = {
     code: 200,
@@ -47,5 +45,4 @@ export function createRequestDataObject(request: Request) : Result<string>{
   };
 
   return result;
-
-};
+}

@@ -1,9 +1,10 @@
-import * as admin from 'firebase-admin';
-import * as authAdmin from 'firebase-admin/auth';
-import { Result } from './result';
+import * as admin from "firebase-admin";
+import * as authAdmin from "firebase-admin/auth";
+import { Result } from "./result";
 
-export async function verifyFirebaseAuthIdTokenOnRequest(firebaseAuthIdToken: string) {
-    
+export async function verifyFirebaseAuthIdTokenOnRequest(
+  firebaseAuthIdToken: string
+) {
   // firebase authentication admin インスタンス初期化
   if (admin.apps.length === 0) {
     admin.initializeApp();
@@ -17,24 +18,26 @@ export async function verifyFirebaseAuthIdTokenOnRequest(firebaseAuthIdToken: st
 
     const uid = decodedToken.uid;
 
-    const result: Result<string> = { 
+    const result: Result<string> = {
       code: 200,
       message: "firebase authentication id token verify success.",
-      data: JSON.stringify({ "uid" : uid, "firebaseAuthIdToken" : firebaseAuthIdToken}),
+      data: JSON.stringify({
+        uid: uid,
+        firebaseAuthIdToken: firebaseAuthIdToken,
+      }),
     };
 
     return result;
-
-  } catch(error) {
-
+  } catch (error) {
     const result: Result<string> = {
       code: 500,
       message: String(error),
-      data: JSON.stringify({ "uid" : "", "firebaseAuthIdToken" : firebaseAuthIdToken}),
+      data: JSON.stringify({
+        uid: "",
+        firebaseAuthIdToken: firebaseAuthIdToken,
+      }),
     };
 
     return result;
-
-  };
+  }
 }
-
