@@ -30,13 +30,14 @@
     ? Do you want to install dependencies with npm now? Yes
 ```
 
-4. set .env
+4. cd functions
+
+5. set .env
 
 ```sh
 cp .env.sample .env
 ```
 
-5. cd functions
 6. npm install
 7. npm run serve
 
