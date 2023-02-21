@@ -1,7 +1,5 @@
 # Stack Remote API
 
-## .env setting
-
 ## emulator start
 
 1. git clone
