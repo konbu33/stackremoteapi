@@ -39,10 +39,11 @@ cp .env.sample .env
 ```
 
 6. npm install
-7. npm run serve
+7. npm run test
+8. npm run serve
 
 ## app deploy
 
 ```sh
-functions/functions_deploy.sh
+./functions_deploy.sh
 ```
