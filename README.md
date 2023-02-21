@@ -1,4 +1,8 @@
-# Start Application
+# Stack Remote API
+
+## .env setting
+
+## emulator start
 
 1. git clone
 2. cd stackremoteapi
@@ -26,8 +30,18 @@
     ? Do you want to install dependencies with npm now? Yes
 ```
 
-4. cd functions
-5. npm install
-6. npm run serve
+4. set .env
 
-end.
+```sh
+cp .env.sample .env
+```
+
+5. cd functions
+6. npm install
+7. npm run serve
+
+## app deploy
+
+```sh
+functions/functions_deploy.sh
+```
