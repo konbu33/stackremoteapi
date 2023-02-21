@@ -71,3 +71,6 @@ node_modules/
 # Firebase Project ID
 .firebaserc
 
+# Miscellaneous
+.DS_Store
+
